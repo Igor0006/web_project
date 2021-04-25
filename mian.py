@@ -18,7 +18,7 @@ login_manager.init_app(app)
 def main():
     app.run(port=8080, host='127.0.0.1')
 
-
+#создание сессии для пользователя и его записи в бд 
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
@@ -31,12 +31,12 @@ def index():
     offers = session.query(Offer)
     return render_template("index.html", offers=offers)
 
-
+# коно предлагающее новому пользователю зарегестрировться
 @app.route("/hello")
 def hello():
     return render_template("hello.html")
 
-
+#сама регистрация
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
@@ -62,21 +62,21 @@ def reqister():
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
-
+#выход из учетной записи
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
 
-
+#профиль, с данными о продажах, балансе и купленных вещах
 @app.route('/profile')
 def profile():
     session = db_session.create_session()
     offers = session.query(Offer).filter(Offer.user_id == current_user.id)
     return render_template('profile.html', offers=offers)
 
-
+#пополнить счет
 @app.route('/money', methods=['GET', 'POST'])
 def money_add():
     form = MoneyForm()
@@ -93,7 +93,7 @@ def money_add():
                                form=form)
     return render_template('money.html', form=form)
 
-
+# покупка, спомощью уникальногго номера для каждого товара и обращению к бд
 @app.route('/buy/<int:number>', methods=['GET', 'POST'])
 def buy(number):
     form = MoneyForm()
@@ -129,7 +129,7 @@ def buy(number):
                                form=form)
     return render_template('buy.html', form=form)
 
-
+# вход с имеющейся учетной записью
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -144,7 +144,7 @@ def login():
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
 
-
+# добавление предложения
 @app.route('/offers', methods=['GET', 'POST'])
 @login_required
 def add_offers():
