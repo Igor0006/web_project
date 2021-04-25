@@ -162,7 +162,7 @@ def add_offers():
     return render_template('offers.html', title='Добавление предложения',
                            form=form)
 
-
+# изменение информации о товаре
 @app.route('/news/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_offers(id):
@@ -191,7 +191,7 @@ def edit_offers(id):
             abort(404)
     return render_template('offers.html', title='Редактирование предложения', form=form)
 
-
+# перепродажа
 @app.route('/resell/<int:id>', methods=['GET', 'POST'])
 @login_required
 def resell(id):
@@ -222,7 +222,7 @@ def resell(id):
             abort(404)
     return render_template('offers.html', title='Перепродажа', form=form)
 
-
+# удаление предложения
 @app.route('/news_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def offers_delete(id):
